@@ -20,11 +20,12 @@ const App = () => {
     } catch (e) {}
   }, [chats])
 
-  const addChat = (prompt, response) => {
+  const addChat = (prompt, response, source = 'unknown') => {
     const item = {
       id: Date.now(),
       prompt,
       response,
+      source,
       createdAt: new Date().toISOString(),
     }
     setChats(prev => [item, ...prev])

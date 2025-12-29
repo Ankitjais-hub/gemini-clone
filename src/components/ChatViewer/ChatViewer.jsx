@@ -7,7 +7,7 @@ const ChatViewer = ({ chat, onClose }) => {
   return (
     <div className="chat-viewer">
       <div className="chat-header">
-        <h3>Conversation</h3>
+        <h3>Conversation {chat.source ? `· ${chat.source}` : ''}</h3>
         <button className="close-btn" onClick={onClose}>Close</button>
       </div>
 

@@ -24,7 +24,7 @@ app.post('/api/generate', async (req, res) => {
     } else {
       reply += `Answer: I would respond to your prompt: "${short}". (This is a local mock; set GOOGLE_API_KEY in server .env for real Gemini responses.)`
     }
-    return res.json({ reply })
+    return res.json({ reply, source: 'mock' })
   }
 
   try {
@@ -40,7 +40,7 @@ app.post('/api/generate', async (req, res) => {
     // best-effort extraction of reply
     const reply = data?.candidates?.[0]?.output || data?.candidates?.[0]?.content || data?.output?.[0]?.content || data?.reply || JSON.stringify(data)
 
-    return res.json({ reply })
+    return res.json({ reply, source: 'gemini' })
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: 'failed to contact API' })

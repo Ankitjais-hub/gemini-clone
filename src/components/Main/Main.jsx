@@ -22,7 +22,8 @@ const Main = ({ onSend, selectedChat, onCloseChat }) => {
       })
       const json = await res.json()
       const reply = json?.reply || 'No response from API.'
-      if (onSend) onSend(prompt, reply)
+      const source = json?.source || 'unknown'
+      if (onSend) onSend(prompt, reply, source)
       setInput('')
     } catch (err) {
       console.error(err)
