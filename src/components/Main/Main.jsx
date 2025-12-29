@@ -6,11 +6,13 @@ import { assets } from '../../assets/assets'
 const Main = ({ onSend }) => {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const sendPrompt = async () => {
     const prompt = input.trim()
     if (!prompt || loading) return
     setLoading(true)
+    setError('')
     try {
       const res = await fetch('/api/generate', {
         method: 'POST',
@@ -23,6 +25,7 @@ const Main = ({ onSend }) => {
       setInput('')
     } catch (err) {
       console.error(err)
+      setError('Could not reach API')
       if (onSend) onSend(prompt, 'Error: could not reach API')
     } finally {
       setLoading(false)
@@ -74,26 +77,35 @@ const Main = ({ onSend }) => {
 
           <div className="main-bottom">
 
-            <div className="search-box">
+            <form className="search-box" onSubmit={(e)=>{e.preventDefault(); sendPrompt();}}>
               <input
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={onKeyDown}
                 placeholder="Enter a prompt here"
                 disabled={loading}
+                aria-label="Prompt input"
               />
 
               <div>
                 <img src={assets.gallery_icon} alt="" />
                 <img src={assets.mic_icon} alt="" />
-                <img
-                  src={assets.send_icon}
-                  alt="send"
-                  style={{ cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1 }}
-                  onClick={sendPrompt}
-                />
+                <button
+                  type="submit"
+                  className="send-button"
+                  title="Send prompt"
+                  disabled={loading}
+                  style={{ background: 'transparent', border: 'none', padding: 0 }}
+                >
+                  <img
+                    src={assets.send_icon}
+                    alt="send"
+                    style={{ cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1 }}
+                  />
+                </button>
               </div>
-            </div>
+            </form>
+            {error ? <div className="send-error">{error}</div> : null}
 
             <p className="bottom-info">
               Gemini may display inaccurate info, including about people, so double-check its responses. Your privacy and Gemini Apps
