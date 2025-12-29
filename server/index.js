@@ -8,7 +8,7 @@ app.use(express.json())
 const PORT = process.env.PORT || 5178
 const IS_MOCK = !process.env.GOOGLE_API_KEY
 
-app.get('/', (req, res) => res.send({ ok: true }))
+app.get('/', (req, res) => res.send({ ok: true, mock: IS_MOCK, env: process.env.NODE_ENV || 'development' }))
 
 app.post('/api/generate', async (req, res) => {
   const prompt = req.body?.prompt || ''
@@ -25,7 +25,7 @@ app.post('/api/generate', async (req, res) => {
     } else {
       reply += `Answer: I would respond to your prompt: "${short}". (This is a local mock; set GOOGLE_API_KEY in server .env for real Gemini responses.)`
     }
-    return res.json({ reply, source: 'mock' })
+    return res.json({ reply, source: 'mock', mock: true, note: 'Running in local mock mode — set GOOGLE_API_KEY in server .env for real Gemini responses.' })
   }
 
   try {
