@@ -23,7 +23,7 @@ const Sidebar = ({ chats = [] }) => {
                                     </div>
                                 ) : (
                                     chats.map(chat => (
-                                        <div key={chat.id} className="recent-entry" onClick={() => alert(chat.response)} style={{ cursor: 'pointer' }}>
+                                        <div key={chat.id} className="recent-entry" onClick={() => onSelect && onSelect(chat)} style={{ cursor: 'pointer' }}>
                                             <img src={assets.message_icon} alt='' />
                                             <p>{chat.prompt.length > 30 ? chat.prompt.slice(0, 30) + '...' : chat.prompt}</p>
                                         </div>

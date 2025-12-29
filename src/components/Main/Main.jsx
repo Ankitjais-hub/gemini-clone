@@ -1,9 +1,10 @@
 import React , { useState } from 'react'
 import "./Main.css"
 import { assets } from '../../assets/assets'
+import ChatViewer from '../ChatViewer/ChatViewer'
 
 
-const Main = ({ onSend }) => {
+const Main = ({ onSend, selectedChat, onCloseChat }) => {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -46,10 +47,14 @@ const Main = ({ onSend }) => {
 
         <div className="main-container">
 
-          <div className="greet">
-            <p><span>Hello, Ankit.</span></p>
-            <p>How can I help you today?</p>
-          </div>
+          {selectedChat ? (
+            <ChatViewer chat={selectedChat} onClose={onCloseChat} />
+          ) : (
+            <div className="greet">
+              <p><span>Hello, Ankit.</span></p>
+              <p>How can I help you today?</p>
+            </div>
+          )}
 
 
           <div className="cards">
