@@ -3,7 +3,35 @@ import "./Main.css"
 import { assets } from '../../assets/assets'
 
 
-const Main = () => {
+const Main = ({ onSend }) => {
+  const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const sendPrompt = async () => {
+    const prompt = input.trim()
+    if (!prompt || loading) return
+    setLoading(true)
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt }),
+      })
+      const json = await res.json()
+      const reply = json?.reply || 'No response from API.'
+      if (onSend) onSend(prompt, reply)
+      setInput('')
+    } catch (err) {
+      console.error(err)
+      if (onSend) onSend(prompt, 'Error: could not reach API')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter') sendPrompt()
+  }
 
   return (
     <div className='main'>
@@ -47,12 +75,23 @@ const Main = () => {
           <div className="main-bottom">
 
             <div className="search-box">
-              <input type="text" placeholder="Enter a prompt here"/>
+              <input
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={onKeyDown}
+                placeholder="Enter a prompt here"
+                disabled={loading}
+              />
 
               <div>
                 <img src={assets.gallery_icon} alt="" />
                 <img src={assets.mic_icon} alt="" />
-                <img src={assets.send_icon} alt="" />
+                <img
+                  src={assets.send_icon}
+                  alt="send"
+                  style={{ cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1 }}
+                  onClick={sendPrompt}
+                />
               </div>
             </div>
 

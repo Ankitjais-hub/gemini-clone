@@ -1,1 +1,23 @@
 # gemini-clone
+
+This is a small Vite + React prototype that integrates with Google Gemini (Generative Language API) via a local server proxy.
+
+## ▶️ View locally (recommended)
+
+1. Install dependencies: `npm install`
+2. Start the frontend dev server: `npm run dev` (open `http://localhost:5173`)
+
+### Gemini API (server proxy)
+
+The project includes a minimal server at `./server` that forwards prompts to Google's Generative Language API (Gemini). This keeps your API key out of the browser.
+
+Steps to use:
+
+1. Copy `.env.example` to `.env` and set `GOOGLE_API_KEY`.
+2. From the project root run:
+	- `cd server && npm install`
+	- `npm run start:server` (or `npm start` from project root)
+3. Start the frontend dev server: `npm run dev`
+4. In the app, type a prompt in the input and click send — responses will be generated and added to the sidebar.
+
+Security note: Do NOT commit your `.env` file. Keep your API key secret.

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import "./Sidebar.css"
 import { assets } from '../../assets/assets'
 
-const Sidebar = () => {
+const Sidebar = ({ chats = [] }) => {
     const[extended,setExtended]=useState(false)
 
   return (
@@ -13,15 +13,24 @@ const Sidebar = () => {
                 <img src={assets.plus_icon} alt="" />
                 {extended?<p>New Chat</p>:null}
             </div>
-            {extended?
-            <div className="recent">
-                <p className="recent-title">Recent</p>
-                <div className="recent-entry">
-                    <img src={assets.message_icon} alt='' />
-                    <p>What is React ...</p>
-                </div>
-            </div>
-            :null}
+                        {extended?
+                        <div className="recent">
+                                <p className="recent-title">Recent</p>
+                                {chats.length === 0 ? (
+                                    <div className="recent-entry">
+                                        <img src={assets.message_icon} alt='' />
+                                        <p>No conversations yet</p>
+                                    </div>
+                                ) : (
+                                    chats.map(chat => (
+                                        <div key={chat.id} className="recent-entry" onClick={() => alert(chat.response)} style={{ cursor: 'pointer' }}>
+                                            <img src={assets.message_icon} alt='' />
+                                            <p>{chat.prompt.length > 30 ? chat.prompt.slice(0, 30) + '...' : chat.prompt}</p>
+                                        </div>
+                                    ))
+                                )}
+                        </div>
+                        :null}
         </div>
 
         <div className="bottom">
