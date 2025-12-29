@@ -15,20 +15,36 @@ const Main = ({ onSend, selectedChat, onCloseChat }) => {
     setLoading(true)
     setError('')
     try {
+      // Use AbortController to enforce a timeout so UI doesn't hang indefinitely
+      const controller = new AbortController()
+      const timer = setTimeout(() => controller.abort(), 15000)
+
       const res = await fetch('/api/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json,text/plain' },
         body: JSON.stringify({ prompt }),
+        signal: controller.signal,
       })
-      const json = await res.json()
-      const reply = json?.reply || 'No response from API.'
-      const source = json?.source || 'unknown'
+
+      clearTimeout(timer)
+
+      const text = await res.text()
+      let json = null
+      try { json = JSON.parse(text) } catch (err) { /* not JSON, keep text */ }
+
+      const reply = (json && json.reply) || text || 'No response from API.'
+      const source = (json && json.source) || 'unknown'
       if (onSend) onSend(prompt, reply, source)
       setInput('')
     } catch (err) {
-      console.error(err)
-      setError('Could not reach API')
-      if (onSend) onSend(prompt, 'Error: could not reach API')
+      console.error('sendPrompt error', err)
+      if (err.name === 'AbortError') {
+        setError('Request timed out (15s). Please try again or check the server.')
+        if (onSend) onSend(prompt, 'Error: request timed out', 'error')
+      } else {
+        setError('Could not reach API')
+        if (onSend) onSend(prompt, 'Error: could not reach API', 'error')
+      }
     } finally {
       setLoading(false)
     }
