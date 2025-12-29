@@ -30,6 +30,9 @@ Steps to use:
 	- `cd server && npm install`
 	- `npm run start:server` (or `npm start` from project root)
 3. Start the frontend dev server: `npm run dev`
+4. Quick check: visit `http://localhost:5178/` — you should see a small JSON payload like `{ "ok": true, "mock": true }` when running without a `GOOGLE_API_KEY`.
 4. In the app, type a prompt in the input and click send — responses will be generated and added to the sidebar. If you see a message that says it's a simulated/local response, set `GOOGLE_API_KEY` to get real Gemini replies.
+
+If you're seeing a blank page at `http://localhost:5173`, first confirm the server is responding at `http://localhost:5178/` and check the browser DevTools Console for any errors. For quick debugging we've added a visible `Loading...` placeholder and an `ErrorBoundary` component that surfaces React rendering errors in-page.
 
 Security note: Do NOT commit your `.env` file. Keep your API key secret.
