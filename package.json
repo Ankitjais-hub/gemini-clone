@@ -8,6 +8,7 @@
     "build": "vite build",
     "start:server": "node server/index.js",
     "start": "npm run start:server",
+    "start:all": "concurrently \"npm run start:server\" \"npm run dev\"",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -26,5 +27,7 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "vite": "^7.2.4"
+  ,
+    "concurrently": "^8.2.0"
   }
 }

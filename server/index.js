@@ -6,13 +6,14 @@ app.use(cors())
 app.use(express.json())
 
 const PORT = process.env.PORT || 5178
+const IS_MOCK = !process.env.GOOGLE_API_KEY
 
 app.get('/', (req, res) => res.send({ ok: true }))
 
 app.post('/api/generate', async (req, res) => {
   const prompt = req.body?.prompt || ''
   if (!prompt) return res.status(400).json({ error: 'missing prompt' })
-  if (!process.env.GOOGLE_API_KEY) {
+  if (IS_MOCK) {
     // Local mock response when API key is not provided.
     // This gives a helpful example reply instead of a terse demo notice.
     const short = prompt.length > 120 ? prompt.slice(0, 117) + '...' : prompt
@@ -47,4 +48,4 @@ app.post('/api/generate', async (req, res) => {
   }
 })
 
-app.listen(PORT, () => console.log(`Server listening on ${PORT}`))
+  app.listen(PORT, () => console.log(`Server listening on ${PORT} (mock mode=${IS_MOCK})`))

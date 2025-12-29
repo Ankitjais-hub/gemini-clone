@@ -5,7 +5,15 @@ This is a small Vite + React prototype that integrates with Google Gemini (Gener
 ## ▶️ View locally (recommended)
 
 1. Install dependencies: `npm install`
-2. Start the frontend dev server: `npm run dev` (open `http://localhost:5173`)
+2. Quick start (recommended for development):
+
+	- Install dependencies: `npm install`
+	- Start both server and frontend in one terminal: `npm run start:all` (opens frontend at `http://localhost:5173`, server at `http://localhost:5178`)
+
+	Or start pieces separately:
+
+	- Start server only: `npm run start:server` (server listens on `http://localhost:5178`)
+	- Start frontend only: `npm run dev` (open `http://localhost:5173`)
 
 ### Gemini API (server proxy)
 
