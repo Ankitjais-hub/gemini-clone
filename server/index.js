@@ -13,8 +13,18 @@ app.post('/api/generate', async (req, res) => {
   const prompt = req.body?.prompt || ''
   if (!prompt) return res.status(400).json({ error: 'missing prompt' })
   if (!process.env.GOOGLE_API_KEY) {
-    // Fallback demo response when API key is not provided locally.
-    return res.json({ reply: 'Demo reply: set GOOGLE_API_KEY in .env (server) for real Gemini responses.' })
+    // Local mock response when API key is not provided.
+    // This gives a helpful example reply instead of a terse demo notice.
+    const short = prompt.length > 120 ? prompt.slice(0, 117) + '...' : prompt
+    let reply = `Simulated response for: "${short}"\n\n`;
+    if (/summari|summariz|brief|short/i.test(prompt)) {
+      reply += `Summary: ${short.split('.').slice(0,2).join('. ')}.`
+    } else if (/suggest|recommend|idea|plan/i.test(prompt)) {
+      reply += `Suggestions:\n- ${short} (idea 1)\n- ${short} (idea 2)`
+    } else {
+      reply += `Answer: I would respond to your prompt: "${short}". (This is a local mock; set GOOGLE_API_KEY in server .env for real Gemini responses.)`
+    }
+    return res.json({ reply })
   }
 
   try {
