@@ -1,0 +1,13 @@
+.error-boundary {
+  padding: 1rem;
+  border: 2px solid #f44336;
+  background: #ffebee;
+  color: #b71c1c;
+  margin: 1rem;
+  border-radius: 6px;
+}
+
+.error-boundary pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}

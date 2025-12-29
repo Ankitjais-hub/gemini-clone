@@ -11,6 +11,7 @@ const App = () => {
     try {
       const raw = localStorage.getItem('chats')
       if (raw) setChats(JSON.parse(raw))
+      console.log('App: loaded chats from localStorage (or starting fresh)')
     } catch (e) {}
   }, [])
 
